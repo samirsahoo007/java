@@ -27,6 +27,7 @@ Furthermore, we can define the maximum heap size using the -**Xmx** parameter:
 `java -Xms4096M -Xmx6144M ClassName`
 
 If the application’s heap usage reaches the maximum size and it still requires more memory, it generates an **OutOfMemoryError**: Java heap space error.
+The Java heap is allocated using **mmap**, or **shmat** if large page support is requested. 
 
 ## 2. Stack Memory
 In this memory type, the JVM stores local variables and method information.
