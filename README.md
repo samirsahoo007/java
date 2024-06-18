@@ -28,6 +28,7 @@ Furthermore, we can define the maximum heap size using the -**Xmx** parameter:
 
 If the application’s heap usage reaches the maximum size and it still requires more memory, it generates an **OutOfMemoryError**: Java heap space error.
 The Java heap is allocated using **mmap**, or **shmat** if large page support is requested. 
+If we don’t specify these flags, then the JVM will choose default values for them. These default values depend on the underlying OS, amount of available RAM, and, of course, the JVM implementation itself:
 
 ## 2. Stack Memory
 In this memory type, the JVM stores local variables and method information.
@@ -65,8 +66,18 @@ ByteBuffer directBuf = ByteBuffer.allocateDirect(1024);
 
 When loading files into memory, Java allocates a series of DirectByteBuffers using the direct memory. This way, it reduces the number of times the same bytes are copied. Buffers have a class responsible for freeing up the memory when the file is no longer needed.
 
-We can limit the direct buffer memory size using the –XX:MaxDirectMemorySize parameter:
+# RSS(Resident Set Size)
+Resident Set Size is the amount of physical RAM currently allocated and used by a process (without swapped out pages). It includes the code, data and shared libraries (which are counted in every process which uses them)
+
+
+We can limit the direct buffer memory size using the –XX:**MaxDirectMemorySize** parameter:
 
 -XX:MaxDirectMemorySize=1024M
 
 If native memory uses all the dedicated space for direct byte buffers, the OutOfMemoryError: Direct buffer memory error occurs.
+
+**Q:** Why is RSS higher than Xmx?
+
+Theoretically, in case of a java application
+
+RSS = Heap size + MetaSpace + OffHeap size
